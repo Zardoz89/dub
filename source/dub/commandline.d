@@ -164,6 +164,8 @@ int runDubCommandLine(string[] args)
 		else if (options.quiet) loglevel = LogLevel.warn;
 		else if (options.verror) loglevel = LogLevel.error;
 		setLogLevel(loglevel);
+
+		if (options.noColors) setLoggingColorsEnabled(false);
 	} catch (Throwable e) {
 		logError("Error processing arguments: %s", e.msg);
 		logDiagnostic("Full exception: %s", e.toString().sanitize);
@@ -293,7 +295,7 @@ int runDubCommandLine(string[] args)
 */
 struct CommonOptions {
 	bool verbose, vverbose, quiet, vquiet, verror;
-	bool help, annotate, bare;
+	bool help, annotate, bare, noColors;
 	string[] registry_urls;
 	string root_path;
 	SkipPackageSuppliers skipRegistry = SkipPackageSuppliers.none;
@@ -323,6 +325,7 @@ struct CommonOptions {
 		args.getopt("q|quiet", &quiet, ["Only print warnings and errors"]);
 		args.getopt("verror", &verror, ["Only print errors"]);
 		args.getopt("vquiet", &vquiet, ["Print no messages"]);
+		args.getopt("no-colors", &noColors, ["Disable color output"]);
 		args.getopt("cache", &placementLocation, ["Puts any fetched packages in the specified location [local|system|user]."]);
 	}
 }
